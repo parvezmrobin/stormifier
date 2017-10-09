@@ -1,0 +1,27 @@
+{
+  "name": "parvezmrobin/stormifier",
+  "author": {
+    "name": "Parvez Mahbub",
+    "email": "parvezmrobin@gmail.com"
+  },
+  "version": "0.0.1",
+  "require": {
+    "php": ">=7.0",
+    "symfony/http-kernel": "^3.3.9",
+    "symfony/security": "^3.3.9",
+    "symfony/yaml": "^3.3.9",
+    "symfony/console": "^3.3.9",
+    "symfony/debug": "^3.3.9",
+    "illuminate/database": "~5.5.2",
+    "mustache/mustache": "^2.12.0"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Stormifier\\": "stormifier/",
+      "App\\": "app/app/"
+    }
+  }
+}
