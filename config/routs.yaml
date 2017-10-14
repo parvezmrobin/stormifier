@@ -1,3 +1,0 @@
-home:
-  path: /
-  defaults: {_controller: "App\\Http\\Controllers\\HomeController::index"}
