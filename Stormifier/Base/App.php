@@ -79,6 +79,7 @@ class App
     private function init()
     {
         $this->startDebug();
+        $GLOBALS['app'] = $this;
         $response = $this->kernel->handle($this->request);
         $response->send();
 
@@ -89,5 +90,13 @@ class App
     {
         $isDev = Config::from($this->basePath, "env")->get('dev');
         if ($isDev) Debug::enable();
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
     }
 }
