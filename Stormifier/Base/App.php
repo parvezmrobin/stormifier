@@ -8,6 +8,7 @@
 namespace Stormifier\Base;
 
 
+use Stormifier\Assistant\Config;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,15 +61,6 @@ class App
         $this->init();
     }
 
-    private function init()
-    {
-        $this->startDebug();
-        $response = $this->kernel->handle($this->request);
-        $response->send();
-
-        $this->kernel->terminate($this->request, $response);
-    }
-
     /**
      * @return RouteCollection
      */
@@ -84,8 +76,18 @@ class App
         return $collection;
     }
 
+    private function init()
+    {
+        $this->startDebug();
+        $response = $this->kernel->handle($this->request);
+        $response->send();
+
+        $this->kernel->terminate($this->request, $response);
+    }
+
     private function startDebug()
     {
-        Debug::enable();
+        $isDev = Config::from($this->basePath, "env")->get('dev');
+        if ($isDev) Debug::enable();
     }
 }
