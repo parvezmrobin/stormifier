@@ -8,6 +8,8 @@
 namespace Stormifier\Assistant;
 
 
+use Symfony\Component\Yaml\Yaml;
+
 class Config implements ConfigInterface
 {
     protected $data;
@@ -22,7 +24,7 @@ class Config implements ConfigInterface
         if (!ends_with($filename, ".yaml")) {
             $filename .= ".yaml";
         }
-        $this->data = file_get_contents($basePath . "/config/" . $filename);
+        $this->data = Yaml::parse(file_get_contents($basePath . "/config/" . $filename));
     }
 
     /**
