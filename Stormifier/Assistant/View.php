@@ -57,18 +57,6 @@ class View
         ));
         $template = $twig->load($this->view . '.twig');
 
-//        $mustache = new Mustache_Engine(array(
-//            'loader' => new Mustache_Loader_FilesystemLoader(
-//                $GLOBALS['app']->getBasePath() . "\\resources\\views",
-//                array('extension' => '.html')
-//            ),
-//            'partials_loader' => new Mustache_Loader_FilesystemLoader(
-//                $GLOBALS['app']->getBasePath() . "/resources/views/partials"
-//            ),
-//            'strict_callables' => true,
-//        ));
-//
-//        $template = $mustache->render($this->view, $this->data);
         return Response::create($template->render($this->data));
     }
 }
