@@ -14,7 +14,8 @@
     "symfony/debug": "^3.3.9",
     "symfony/routing": "^3.3.9",
     "illuminate/database": "~5.5.2",
-    "mustache/mustache": "^2.12.0"
+    "twig/twig": "~2.0",
+    "php-di/php-di": "^5.4"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4"

@@ -8,9 +8,9 @@
 namespace Stormifier\Assistant;
 
 
-use Mustache_Engine;
-use Mustache_Loader_FilesystemLoader;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 class View
 {
@@ -22,7 +22,8 @@ class View
      * @param string $viewName
      * @param array $data
      */
-    function __construct($viewName, $data = []) {
+    function __construct($viewName, $data = [])
+    {
         $this->view = $viewName;
         $this->data = $data;
     }
@@ -50,18 +51,24 @@ class View
 
     public function render()
     {
-        $mustache = new Mustache_Engine(array(
-            'loader' => new Mustache_Loader_FilesystemLoader(
-                $GLOBALS['app']->getBasePath() . "\\resources\\views",
-                array('extension' => '.html')
-            ),
-            'partials_loader' => new Mustache_Loader_FilesystemLoader(
-                $GLOBALS['app']->getBasePath() . "/resources/views/partials"
-            ),
-            'strict_callables' => true,
+        $loader = new Twig_Loader_Filesystem($GLOBALS['app']->getBasePath() . "\\resources\\views");
+        $twig = new Twig_Environment($loader, array(
+            'cache' => $GLOBALS['app']->getBasePath() . "\\resources\\views\\Cache",
         ));
+        $template = $twig->load($this->view . '.twig');
 
-        $template = $mustache->render($this->view, $this->data);
-        return Response::create($template);
+//        $mustache = new Mustache_Engine(array(
+//            'loader' => new Mustache_Loader_FilesystemLoader(
+//                $GLOBALS['app']->getBasePath() . "\\resources\\views",
+//                array('extension' => '.html')
+//            ),
+//            'partials_loader' => new Mustache_Loader_FilesystemLoader(
+//                $GLOBALS['app']->getBasePath() . "/resources/views/partials"
+//            ),
+//            'strict_callables' => true,
+//        ));
+//
+//        $template = $mustache->render($this->view, $this->data);
+        return Response::create($template->render($this->data));
     }
 }
