@@ -54,7 +54,7 @@ class View
         $loader = new Twig_Loader_Filesystem($GLOBALS['app']->getBasePath() . "\\resources\\views");
         $twig = new Twig_Environment($loader, array(
             'cache' => $GLOBALS['app']->getBasePath() . "\\resources\\views\\Cache",
-            'debug' => Config::from($GLOBALS['app']->getBasePath(), 'env')->get('dev'),
+            'debug' => Config::from('env', $GLOBALS['app']->getBasePath())->get('dev'),
             'strict_variables' => true
         ));
         $template = $twig->load($this->view . '.twig');
