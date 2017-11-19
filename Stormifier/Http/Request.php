@@ -8,17 +8,37 @@
 namespace Stormifier\Http;
 
 
+use Stormifier\Base\Storm;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class Request extends SymfonyRequest
 {
     /**
-     * @param string $key
-     * @return bool
+     * @var Storm
      */
-    public function has(string $key): bool
+    public $storm;
+
+    /**
+     * @var ParameterBag[]
+     */
+    public $parameterBags;
+
+    public function __construct(
+        array $query = array(),
+        array $request = array(),
+        array $attributes = array(),
+        array $cookies = array(),
+        array $files = array(),
+        array $server = array(),
+        $content = null
+    )
     {
-        $parameterBags = [
+        $this->storm = $GLOBALS['storm'];
+
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+
+        $this->parameterBags = [
             $this->query,
             $this->request,
             $this->attributes,
@@ -26,8 +46,15 @@ class Request extends SymfonyRequest
             $this->server,
             $this->headers
         ];
+    }
 
-        foreach ($parameterBags as $parameterBag) {
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function has(string $key): bool
+    {
+        foreach ($this->parameterBags as $parameterBag) {
             if ($parameterBag->has($key)) {
                 return true;
             }

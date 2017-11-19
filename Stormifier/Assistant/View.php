@@ -51,10 +51,10 @@ class View
 
     public function render()
     {
-        $loader = new Twig_Loader_Filesystem($GLOBALS['app']->getBasePath() . "\\resources\\views");
+        $loader = new Twig_Loader_Filesystem($GLOBALS['storm']->getBasePath() . "\\resources\\views");
         $twig = new Twig_Environment($loader, array(
-            'cache' => $GLOBALS['app']->getBasePath() . "\\resources\\views\\Cache",
-            'debug' => Config::from('env', $GLOBALS['app']->getBasePath())->get('dev'),
+            'cache' => $GLOBALS['storm']->getBasePath() . "\\resources\\views\\Cache",
+            'debug' => Config::from('env')->get('dev'),
             'strict_variables' => true
         ));
         $template = $twig->load($this->view . '.twig');

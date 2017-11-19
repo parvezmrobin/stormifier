@@ -8,6 +8,7 @@
 namespace Stormifier\Base;
 
 
+use DI\ContainerBuilder;
 use Stormifier\Assistant\Config;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -30,6 +31,11 @@ class Storm
     protected $argResolver;
     protected $matcher;
     private $kernel;
+
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    public $container;
 
     /**
      * App constructor.
@@ -55,6 +61,10 @@ class Storm
             $this->argResolver
         );
 
+        $this->container = ContainerBuilder::buildDevContainer();
+        $this->container->set('storm', $this);
+
+        $GLOBALS['storm'] = $this;
         $this->init();
     }
 
@@ -76,7 +86,6 @@ class Storm
     private function init()
     {
         $this->startDebug();
-        $GLOBALS['app'] = $this;
     }
 
     private function startDebug()

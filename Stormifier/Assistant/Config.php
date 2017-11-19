@@ -8,6 +8,7 @@
 namespace Stormifier\Assistant;
 
 
+use Stormifier\Base\Storm;
 use Symfony\Component\Yaml\Yaml;
 use Stormifier\Assistant\Interfaces\IConfig;
 
@@ -16,15 +17,22 @@ class Config implements IConfig
     protected $data;
 
     /**
+     * @var Storm
+     */
+    public $storm;
+
+    /**
      * Config constructor.
      * @param string $basePath
      * @param string $filename
      */
     function __construct(string $filename, string $basePath = null)
     {
+        $this->storm = $GLOBALS['storm'];
         if (is_null($basePath)) {
-            $basePath = $GLOBALS['app']->getBasePath();
+            $basePath = $this->storm->getBasePath();
         }
+
         if (!$this->endsWith($filename, ".yaml")) {
             $filename .= ".yaml";
         }
