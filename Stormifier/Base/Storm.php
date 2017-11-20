@@ -73,7 +73,7 @@ class Storm
      */
     private function makeRouteCollection()
     {
-        $routesArray = Yaml::parse(file_get_contents($this->basePath . "/config/routs.yaml"));
+        $routesArray = require($this->basePath . "/config/routs.php");
         $collection = new RouteCollection();
 
         foreach ($routesArray as $name => $route) {

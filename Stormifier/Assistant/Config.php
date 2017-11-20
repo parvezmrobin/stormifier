@@ -33,10 +33,10 @@ class Config implements IConfig
             $basePath = $this->storm->getBasePath();
         }
 
-        if (!$this->endsWith($filename, ".yaml")) {
-            $filename .= ".yaml";
+        if (!$this->endsWith($filename, ".php")) {
+            $filename .= ".php";
         }
-        $this->data = Yaml::parse(file_get_contents($basePath . "/config/" . $filename));
+        $this->data = require($basePath . "/config/" . $filename);
     }
 
     /**
