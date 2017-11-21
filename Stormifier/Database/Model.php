@@ -66,6 +66,15 @@ class Model implements ArrayAccess, JsonSerializable, IteratorAggregate
     }
 
     /**
+     * @param array $data
+     * @return static
+     */
+    public static function createFromArray(array $data)
+    {
+        return new static($data);
+    }
+
+    /**
      * @param string $key
      * @return mixed
      */
