@@ -11,14 +11,15 @@
     "symfony/security": "^3.3.9",
     "symfony/yaml": "^3.3.9",
     "symfony/console": "^3.3.9",
-    "symfony/debug": "^3.3.9",
     "symfony/routing": "^3.3.9",
     "twig/twig": "~2.0",
     "php-di/php-di": "^5.4",
     "doctrine/inflector": "^1.2"
   },
   "require-dev": {
-    "fzaninotto/faker": "~1.4"
+    "symfony/debug": "^3.3.9",
+    "fzaninotto/faker": "~1.4",
+    "symfony/var-dumper": "^3.3"
   },
   "autoload": {
     "psr-4": {
