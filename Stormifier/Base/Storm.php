@@ -77,7 +77,7 @@ class Storm
      */
     private function makeRouteCollection()
     {
-        $routesArray = require($this->basePath . "/config/routs.php");
+        $routesArray = require($this->basePath . "/config/routes.php");
         $collection = new RouteCollection();
 
         foreach ($routesArray as $name => $route) {
