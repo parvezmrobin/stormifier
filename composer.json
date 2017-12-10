@@ -25,6 +25,9 @@
     "psr-4": {
       "Stormifier\\": "stormifier/",
       "App\\": "app/"
-    }
+    },
+    "files": [
+      "Stormifier/Assistant/functions.php"
+    ]
   }
 }

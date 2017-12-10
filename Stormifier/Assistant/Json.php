@@ -10,10 +10,8 @@ namespace Stormifier\Assistant;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class Json
+class Json extends StormResponse
 {
-    protected $data;
-
     /**
      * Json constructor.
      * @param array $data
@@ -35,24 +33,16 @@ class Json
      * @param array $data
      * @return Response
      */
-    public static function response($data)
+    public static function response(array $data): Response
     {
         return new Response(json_encode($data));
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     */
-    public function with($key, $value)
-    {
-        $this->data[$key] = $value;
-    }
 
     /**
-     * @return Response
+     * @inheritdoc
      */
-    public function respond()
+    public function respond(): Response
     {
         return new Response(json_encode($this->data));
     }

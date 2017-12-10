@@ -9,7 +9,6 @@ namespace Stormifier\Assistant;
 
 
 use Stormifier\Base\Storm;
-use Symfony\Component\Yaml\Yaml;
 use Stormifier\Assistant\Interfaces\IConfig;
 
 class Config implements IConfig
@@ -28,7 +27,7 @@ class Config implements IConfig
      */
     function __construct(string $filename, string $basePath = null)
     {
-        $this->storm = $GLOBALS['storm'];
+        $this->storm = \storm();
         if (is_null($basePath)) {
             $basePath = $this->storm->getBasePath();
         }

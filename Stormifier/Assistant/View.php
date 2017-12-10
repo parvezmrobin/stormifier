@@ -12,10 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
-class View
+class View extends StormResponse
 {
     protected $view;
-    protected $data;
 
     /**
      * View constructor.
@@ -39,21 +38,27 @@ class View
     }
 
     /**
-     * @param string $key
-     * @param string $value
-     * @return $this
+     * @inheritdoc
+     * @internal param string $view
      */
-    public function with($key, $value)
+    public static function response(array $data): Response
     {
-        $this->data[$key] = $value;
-        return $this;
+        if (func_num_args() === 1) {
+            throw new \InvalidArgumentException("Parameter \$view not given");
+        }
+        return (new static(func_get_arg(1), $data))->respond();
     }
 
-    public function render()
+    /**
+     * @inheritdoc
+     */
+    public function respond(): Response
     {
-        $loader = new Twig_Loader_Filesystem($GLOBALS['storm']->getBasePath() . "\\resources\\views");
-        $twig = new Twig_Environment($loader, array(
-            'cache' => $GLOBALS['storm']->getBasePath() . "\\resources\\views\\Cache",
+        $storm = storm();
+        $loader = new Twig_Loader_Filesystem($storm->getBasePath() . "\\resources\\views");
+        $twig = new Twig_Environment(
+            $loader, array(
+            'cache' => $storm->getBasePath() . "\\resources\\views\\Cache",
             'debug' => Config::from('env')->get('dev'),
             'strict_variables' => true
         ));

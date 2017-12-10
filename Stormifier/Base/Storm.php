@@ -9,6 +9,7 @@ namespace Stormifier\Base;
 
 
 use DI\ContainerBuilder;
+use DI\Container;
 use Stormifier\Assistant\Config;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -21,21 +22,23 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Yaml\Yaml;
 
 class Storm
 {
+    /**
+     * @var Container
+     */
+    protected static $container;
+    /**
+     * @var Storm
+     */
+    private static $storm;
     protected $basePath;
     protected $dispatcher;
     protected $ctrlResolver;
     protected $argResolver;
     protected $matcher;
     private $kernel;
-
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    public $container;
 
     /**
      * App constructor.
@@ -49,9 +52,10 @@ class Storm
             $routeCollection, new RequestContext()
         );
         $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addSubscriber(new RouterListener(
-            $this->matcher, new RequestStack()
-        ));
+        $this->dispatcher->addSubscriber(
+            new RouterListener(
+                $this->matcher, new RequestStack()
+            ));
         $this->ctrlResolver = new ControllerResolver();
         $this->argResolver = new ArgumentResolver();
         $this->kernel = new HttpKernel(
@@ -61,10 +65,10 @@ class Storm
             $this->argResolver
         );
 
-        $this->container = ContainerBuilder::buildDevContainer();
-        $this->container->set('storm', $this);
+        static::$container = ContainerBuilder::buildDevContainer();
+        static::$container->set('storm', $this);
+        static::$storm = $this;
 
-        $GLOBALS['storm'] = $this;
         $this->init();
     }
 
@@ -83,11 +87,17 @@ class Storm
         return $collection;
     }
 
+    /**
+     * Initializes the system
+     */
     private function init()
     {
         $this->startDebug();
     }
 
+    /**
+     * Starts debugging in development mode
+     */
     private function startDebug()
     {
         $isDev = Config::from("env", $this->basePath)->get('dev');
@@ -95,9 +105,17 @@ class Storm
     }
 
     /**
+     * @return Container
+     */
+    public static function getContainer(): Container
+    {
+        return static::$container;
+    }
+
+    /**
      * @return string
      */
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return $this->basePath;
     }
@@ -105,8 +123,16 @@ class Storm
     /**
      * @return HttpKernel
      */
-    public function getKernel()
+    public function getKernel():  HttpKernel
     {
         return $this->kernel;
+    }
+
+    /**
+     * @return Storm
+     */
+    public static function getStorm()
+    {
+        return static::$storm;
     }
 }
