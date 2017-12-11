@@ -43,9 +43,13 @@ class Storm
     /**
      * App constructor.
      * @param $basePath
+     * @param string|null $kernel
      */
-    function __construct($basePath)
+    function __construct($basePath, $kernel = null)
     {
+
+        $this->setupContainer();
+
         $this->basePath = $basePath;
         $routeCollection = $this->makeRouteCollection();
         $this->matcher = new UrlMatcher(
@@ -56,20 +60,25 @@ class Storm
             new RouterListener(
                 $this->matcher, new RequestStack()
             ));
-        $this->ctrlResolver = new ControllerResolver();
-        $this->argResolver = new ArgumentResolver();
-        $this->kernel = new HttpKernel(
-            $this->dispatcher,
-            $this->ctrlResolver,
-            new RequestStack(),
-            $this->argResolver
-        );
 
+        if (is_null($kernel)) {
+            $this->kernel = static::$container->make(
+                HttpKernel::class,
+                [
+                    "dispatcher" => $this->dispatcher,
+                ]);
+        } else {
+            $this->kernel = static::$container->make($kernel, array_slice(func_get_args(), 2, null, true));
+        }
+
+        $this->init();
+    }
+
+    protected function setupContainer()
+    {
         static::$container = ContainerBuilder::buildDevContainer();
         static::$container->set('storm', $this);
         static::$storm = $this;
-
-        $this->init();
     }
 
     /**
@@ -113,6 +122,14 @@ class Storm
     }
 
     /**
+     * @return Storm
+     */
+    public static function getStorm()
+    {
+        return static::$storm;
+    }
+
+    /**
      * @return string
      */
     public function getBasePath(): string
@@ -123,16 +140,8 @@ class Storm
     /**
      * @return HttpKernel
      */
-    public function getKernel():  HttpKernel
+    public function getKernel(): HttpKernel
     {
         return $this->kernel;
-    }
-
-    /**
-     * @return Storm
-     */
-    public static function getStorm()
-    {
-        return static::$storm;
     }
 }
