@@ -8,17 +8,14 @@
 namespace Stormifier\Assistant;
 
 
-use Stormifier\Base\Storm;
 use Stormifier\Assistant\Interfaces\IConfig;
 
 class Config implements IConfig
 {
-    protected $data;
-
     /**
-     * @var Storm
+     * @var array
      */
-    public $storm;
+    protected $data;
 
     /**
      * Config constructor.
@@ -27,12 +24,11 @@ class Config implements IConfig
      */
     function __construct(string $filename, string $basePath = null)
     {
-        $this->storm = \storm();
         if (is_null($basePath)) {
             $basePath = $this->storm->getBasePath();
         }
 
-        if (!$this->endsWith($filename, ".php")) {
+        if (\endsWith($filename, ".php")) {
             $filename .= ".php";
         }
         $this->data = require($basePath . "/config/" . $filename);
@@ -54,15 +50,8 @@ class Config implements IConfig
         return $this->data[$key];
     }
 
-    /**
-     * @param string $haystack
-     * @param string $needle
-     * @return bool
-     */
-    private function endsWith(string $haystack, string $needle) {
-        $stringLen = strlen($haystack);
-        $testLen = strlen($needle);
-        if ($testLen > $stringLen) return false;
-        return substr_compare($haystack, $needle, $stringLen - $testLen, $testLen, true) === 0;
+    public function all()
+    {
+        return $this->data;
     }
 }
