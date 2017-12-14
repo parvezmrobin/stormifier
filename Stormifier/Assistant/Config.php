@@ -9,6 +9,7 @@ namespace Stormifier\Assistant;
 
 
 use Stormifier\Assistant\Interfaces\IConfig;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 class Config implements IConfig
 {
@@ -32,11 +33,18 @@ class Config implements IConfig
             $basePath = \storm()->getBasePath();
         }
 
+        // If $fileName doesn't have .php extension, add it
         if (\endsWith($fileName, ".php")) {
             $fileName .= ".php";
         }
-        $this->data = require($basePath . "/config/" . $fileName);
-        static::$loads[$fileName] = $this;
+
+        // Read the config file, if exists
+        if (file_exists($filePath = $basePath . "/config/" . $fileName)) {
+            $this->data = require($filePath);
+            static::$loads[$fileName] = $this;
+        } else {
+            throw new FileNotFoundException($filePath . " not found");
+        }
     }
 
     /**
