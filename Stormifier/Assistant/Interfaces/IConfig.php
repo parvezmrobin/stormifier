@@ -15,11 +15,16 @@ interface IConfig
      * @param string $fileName
      * @return IConfig
      */
-    public static function from(string $fileName, string $basePath);
+    public static function from(string $fileName, string $basePath): IConfig;
 
     /**
      * @param string $key
      * @return string
      */
-    public function get($key);
+    public function get($key): string;
+
+    /**
+     * @return array
+     */
+    public function all(): array;
 }
