@@ -39,3 +39,17 @@ if (!function_exists('endsWith')) {
         return substr_compare($haystack, $needle, $stringLen - $testLen, $testLen, true) === 0;
     }
 }
+
+if (!function_exists('config')) {
+    function config($fileName, $key = null) {
+        $config = \Stormifier\Assistant\Config::from($fileName);
+
+        // If no $key provided, return Config object
+        if (is_null($key)) {
+            return $config;
+        }
+
+        //Else return associated value
+        return $config->get($key);
+    }
+}
